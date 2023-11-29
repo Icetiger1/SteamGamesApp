@@ -1,0 +1,43 @@
+﻿@model List<GameInfo>
+@{
+    ViewData["Title"] = "SteamGamesApp";
+}
+<h2>Список игр Steam и количество часов, проведенных в них:</h2>
+<hr />
+@if (Model != null)
+{
+    <h5>@ViewData["accountName"] </h5>
+    <div class="row">
+        <div class="col-md-2">
+            <img src="@ViewData["accountIcon"]">
+        </div>
+    </div>
+    
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Иконка</th>
+            <th>ID игры</th>
+            <th>Название игры</th>
+            <th>Количество часов</th>
+            <th>Дата последнего входа</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var game in Model)
+        {
+            <tr>
+                <td><img src=@game.IconUrl></td>
+                <td>@game.AppId</td>
+                <td>@game.Name</td>
+                <td>@game.Playtime</td>
+                <td>@game.Lastplayed</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Не удалось получить данные об играх пользователя.</p>
+}
