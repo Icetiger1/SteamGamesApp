@@ -32,18 +32,20 @@ namespace SteamGamesApp.Controllers
             using (HttpClient client1 = new HttpClient())
             {
                 var response = await client1.GetAsync(url1);
-                var accountInfo = JsonConvert.DeserializeObject<dynamic> (
+                if (response.IsSuccessStatusCode)
+                {
+                    var accountInfo = JsonConvert.DeserializeObject<dynamic>(
                     await response.Content.ReadAsStringAsync());
 
-                // Извлечение имени аккаунта и его иконки
-                steamUser.NameUser = accountInfo["response"]["players"][0]["personaname"].ToString();
-                steamUser.IconUser = accountInfo["response"]["players"][0]["avatarfull"].ToString();
-                ViewData["accountName"] = steamUser.NameUser;
-                ViewData["accountIcon"] = steamUser.IconUser;
+                    // Извлечение имени аккаунта и его иконки
+                    steamUser.NameUser = accountInfo["response"]["players"][0]["personaname"].ToString();
+                    steamUser.IconUser = accountInfo["response"]["players"][0]["avatarfull"].ToString();
+                    ViewData["accountName"] = steamUser.NameUser;
+                    ViewData["accountIcon"] = steamUser.IconUser;
+                }
             }
 
-            string url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=EDF4805634DD51C580C147C7793563F4&steamid={steamUser.SteamId}&include_appinfo=true";
-
+            var url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=EDF4805634DD51C580C147C7793563F4&steamid={steamUser.SteamId}&include_appinfo=true";
             using (HttpClient client = new HttpClient())
             {
                 var response = await client.GetAsync(url);

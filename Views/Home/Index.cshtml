@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-offset-1 col-md-12">
             <div class="panel">
-                <div class="panel-heading">
+                 <div class="panel-heading">
                     <div class="row">
                         <h5 class="text-light">@ViewData["accountName"] </h5>
                         <div class="row">
@@ -18,9 +18,9 @@
                                 <br />
                             </div>
                         </div>
-                            <div class="panel-body table-responsive">
-                                <table class="table">
-                                    <thead>
+                        <div class="panel-body table-responsive">
+                            <table class="table">
+                                <thead>
                                     <tr>
                                         <th>Иконка</th>
                                         <th>ID игры</th>
@@ -28,8 +28,8 @@
                                         <th>Количество часов</th>
                                         <th>Дата последнего входа</th>
                                     </tr>
-                                    </thead>
-                                    <tbody>
+                                </thead>
+                                <tbody>
                                     @foreach (var game in Model)
                                     {
                                         <tr>
@@ -40,12 +40,12 @@
                                             <td>@game.Lastplayed</td>
                                         </tr>
                                     }
-                                    </tbody>
-                                </table>
-                           </div>
-                   </div>
-               </div>
-          </div>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 }
