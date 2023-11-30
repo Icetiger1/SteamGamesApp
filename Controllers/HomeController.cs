@@ -26,7 +26,7 @@ namespace SteamGamesApp.Controllers
         private async Task<List<GameInfo>> GetGamesBySteamId(SteamUser steamUser)
         {
             const string apiKey = "EDF4805634DD51C580C147C7793563F4";
-            steamUser.SteamId = "76561198124071517";
+            steamUser.SteamId = "76561198029140935";
 
             var url1 = $"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key={apiKey}&steamids={steamUser.SteamId}";
             using (HttpClient client1 = new HttpClient())
