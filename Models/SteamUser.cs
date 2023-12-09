@@ -5,5 +5,10 @@
         public string? SteamId { get; set; }
         public string? NameUser { get; set; }
         public string IconUser { get; set; }
+
+        public SteamUser(string steamId)
+        {
+            this.SteamId = steamId;
+        }
     }
 }

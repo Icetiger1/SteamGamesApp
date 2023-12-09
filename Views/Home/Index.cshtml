@@ -2,42 +2,55 @@
 @{
     ViewData["Title"] = "SteamGamesApp";
 }
-<h2>Список игр Steam и количество часов, проведенных в них:</h2>
-<hr />
+<h2 class="text-center text-light">Список игр Steam и количество часов, проведенных в них:</h2>
+    
 @if (Model != null)
 {
-    <h5>@ViewData["accountName"] </h5>
     <div class="row">
-        <div class="col-md-2">
-            <img src="@ViewData["accountIcon"]">
+        <div class="col-md-offset-1 col-md-12">
+            <div class="panel">
+                 <div class="panel-heading">
+                    <div class="row">
+                        <h5 class="text-light">@ViewData["accountName"] </h5>
+                        <div class="row">
+                            <div class="col-md-2 mb-3">
+                                <img class="border border-5 border-success" src="@ViewData["accountIcon"]">
+                                <br />
+                            </div>
+                        </div>
+                        <div class="panel-body table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Иконка</th>
+                                        <th>ID игры</th>
+                                        <th>Название игры</th>
+                                        <th>Количество часов</th>
+                                        <th>Дата последнего входа</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var game in Model)
+                                    {
+                                        <tr>
+                                            <td><img src=@game.IconUrl class="rounded-circle"></td>
+                                            <td>@game.AppId</td>
+                                            <td>@game.Name</td>
+                                            <td>@game.Playtime</td>
+                                            <td>@game.Lastplayed</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Иконка</th>
-            <th>ID игры</th>
-            <th>Название игры</th>
-            <th>Количество часов</th>
-            <th>Дата последнего входа</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var game in Model)
-        {
-            <tr>
-                <td><img src=@game.IconUrl></td>
-                <td>@game.AppId</td>
-                <td>@game.Name</td>
-                <td>@game.Playtime</td>
-                <td>@game.Lastplayed</td>
-            </tr>
-        }
-        </tbody>
-    </table>
 }
 else
 {
     <p>Не удалось получить данные об играх пользователя.</p>
 }
+    

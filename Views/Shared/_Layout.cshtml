@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SteamGamesApp.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body style="background-color:#1b1a1f">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -27,15 +27,15 @@
             </div>
         </nav>
     </header>
-    <div class="container" style="background-color:lightgrey">
+    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - SteamGamesApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer text-muted bg-dark">
+        <div class="container text-light">
+            &copy; 2023 - SteamGamesApp
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
