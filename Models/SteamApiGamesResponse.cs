@@ -2,6 +2,6 @@
 {
     public class SteamApiGamesResponse
     {
-        public List<SteamApiGame> games { get; set; }
+        public List<SteamApiGame> Games { get; set; }
     }
 }

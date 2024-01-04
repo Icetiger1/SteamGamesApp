@@ -17,6 +17,10 @@
                                 <img class="border border-5 border-success" src="@ViewData["accountIcon"]">
                                 <br />
                             </div>
+                            <div class="col-md-7 mb-4">
+                                <p class="text-light">Имя: @ViewData["accountRealName"]</p>
+                                <p class="text-light">Дата последнего входа: @ViewData["accountTimeCreate"]</p>
+                            </div>
                         </div>
                         <div class="panel-body table-responsive">
                             <table class="table">
@@ -36,7 +40,7 @@
                                             <td><img src=@game.IconUrl class="rounded-circle"></td>
                                             <td>@game.AppId</td>
                                             <td>@game.Name</td>
-                                            <td>@game.Playtime</td>
+                                            <td>@game.Playtime ч.</td>
                                             <td>@game.Lastplayed</td>
                                         </tr>
                                     }

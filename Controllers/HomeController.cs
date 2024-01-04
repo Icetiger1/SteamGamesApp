@@ -20,6 +20,8 @@ namespace SteamGamesApp.Controllers
             //Получение информации об аккаунте
             var user = await GetSteamUser();
             ViewData["accountName"] = user.NameUser;
+            ViewData["accountRealName"] = user.Realname;
+            ViewData["accountTimeCreate"] = ConvertToTime(user.TimeCreate).ToString();
             ViewData["accountIcon"] = user.IconUser;
 
             // Получение информации об играх пользователя по его steamId
@@ -42,6 +44,8 @@ namespace SteamGamesApp.Controllers
 
                     // Извлечение имени аккаунта и его иконки
                     User.NameUser = accountInfo["response"]["players"][0]["personaname"].ToString();
+                    User.Realname = accountInfo["response"]["players"][0]["realname"].ToString();
+                    User.TimeCreate = accountInfo["response"]["players"][0]["timecreated"];
                     User.IconUser = accountInfo["response"]["players"][0]["avatarfull"].ToString();
 
                     return User;
@@ -64,11 +68,9 @@ namespace SteamGamesApp.Controllers
 
                     // Преобразование данных из формата Steam API в список игр
                     var games = new List<GameInfo>();
-                    foreach (var game in data.response.games)
+
+                    foreach (var game in data.Response.Games)
                     {
-                        var expirationTime = DateTimeOffset
-                            .FromUnixTimeSeconds(game.rtime_last_played)
-                            .DateTime;
                         var gameInfo = new GameInfo
                         {
                             IconUrl = "http://media.steampowered.com/steamcommunity/public/images/apps/" +
@@ -76,10 +78,9 @@ namespace SteamGamesApp.Controllers
                             AppId = game.appid,
                             Name = game.name,
                             Playtime = Math.Round(game.playtime_forever / 60, 2),
-                            Lastplayed = expirationTime.ToString()
+                            Lastplayed = ConvertToTime(game.rtime_last_played).ToString()
                         };
                         games.Add(gameInfo);
-                        Console.WriteLine($"{game.appid} {game.name} {game.playtime_forever}");
                     }
 
                     return games;
@@ -88,6 +89,16 @@ namespace SteamGamesApp.Controllers
 
             return null;
         }
+
+        public DateTime ConvertToTime(int time)
+        {
+            var expirationTime = DateTimeOffset
+                           .FromUnixTimeSeconds(time)
+                           .DateTime;
+
+            return expirationTime;
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
