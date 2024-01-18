@@ -1,4 +1,4 @@
-﻿@model List<GameInfo>
+﻿@model SteamGamesApp.Models.SteamUser;
 @{
     ViewData["Title"] = "SteamGamesApp";
 }
@@ -11,15 +11,15 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="row">
-                        <h5 class="text-light">@ViewData["accountName"] </h5>
+                        <h5 class="text-light">@Model.NameUser</h5>
                         <div class="row">
                             <div class="col-md-2 mb-3">
-                                <img class="border border-5 border-success" src="@ViewData["accountIcon"]">
+                                <img class="border border-5 border-success" src="@Model.IconUser">
                                 <br />
                             </div>
                             <div class="col-md-7 mb-4">
-                                <p class="text-light">Имя: @ViewData["accountRealName"]</p>
-                                <p class="text-light">Дата последнего входа: @ViewData["accountTimeCreate"]</p>
+                                <p class="text-light">Имя: @Model.Realname</p>
+                                <p class="text-light">Дата последнего входа: @Model.TimeCreate</p>
                             </div>
                         </div>
                         <div class="panel-body table-responsive">
@@ -34,7 +34,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var game in Model)
+                                    @foreach (var game in Model.GameInfo)
                                     {
                                         <tr>
                                             <td><img src=@game.IconUrl class="rounded-circle"></td>

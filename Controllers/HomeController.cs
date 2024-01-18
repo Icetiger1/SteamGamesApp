@@ -11,29 +11,21 @@ namespace SteamGamesApp.Controllers
 {
     public class HomeController : Controller
     {
-        private SteamUser User { get; set; } = new("76561198124071517");
+        private SteamUser steamUser { get; set; } = new("76561198124071517");
         private const string apiKey = "EDF4805634DD51C580C147C7793563F4";
 
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            //Получение информации об аккаунте
             var user = await GetSteamUser();
-            ViewData["accountName"] = user.NameUser;
-            ViewData["accountRealName"] = user.Realname;
-            ViewData["accountTimeCreate"] = ConvertToTime(user.TimeCreate).ToString();
-            ViewData["accountIcon"] = user.IconUser;
+            user.GameInfo = await GetGamesBySteamId();
 
-            // Получение информации об играх пользователя по его steamId
-            var games = await GetGamesBySteamId();
-
-            // Передаем данные на представление
-            return View(games);
+            return View(user);
         }
 
         private async Task<SteamUser> GetSteamUser()
         {
-            var url1 = $"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key={apiKey}&steamids={User.SteamId}";
+            string url1 = $"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key={apiKey}&steamids={steamUser.SteamId}";
             using (HttpClient client1 = new HttpClient())
             {
                 var response = await client1.GetAsync(url1);
@@ -42,13 +34,12 @@ namespace SteamGamesApp.Controllers
                     var accountInfo = JsonConvert.DeserializeObject<dynamic>(
                     await response.Content.ReadAsStringAsync());
 
-                    // Извлечение имени аккаунта и его иконки
-                    User.NameUser = accountInfo["response"]["players"][0]["personaname"].ToString();
-                    User.Realname = accountInfo["response"]["players"][0]["realname"].ToString();
-                    User.TimeCreate = accountInfo["response"]["players"][0]["timecreated"];
-                    User.IconUser = accountInfo["response"]["players"][0]["avatarfull"].ToString();
+                    steamUser.NameUser = accountInfo["response"]["players"][0]["personaname"].ToString();
+                    steamUser.Realname = accountInfo["response"]["players"][0]["realname"].ToString();
+                    steamUser.TimeCreate = accountInfo["response"]["players"][0]["timecreated"];
+                    steamUser.IconUser = accountInfo["response"]["players"][0]["avatarfull"].ToString();
 
-                    return User;
+                    return steamUser;
                 }
                 return null;
             }
@@ -56,7 +47,7 @@ namespace SteamGamesApp.Controllers
 
         private async Task<List<GameInfo>> GetGamesBySteamId()
         {
-            string url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={apiKey}&steamid={User.SteamId}&include_appinfo=true";
+            string url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={apiKey}&steamid={steamUser.SteamId}&include_appinfo=true";
 
             using (HttpClient client = new HttpClient())
             {
@@ -66,37 +57,25 @@ namespace SteamGamesApp.Controllers
                     var data = JsonConvert.DeserializeObject<SteamApiResponse>(
                     await response.Content.ReadAsStringAsync());
 
-                    // Преобразование данных из формата Steam API в список игр
                     var games = new List<GameInfo>();
 
                     foreach (var game in data.Response.Games)
                     {
                         var gameInfo = new GameInfo
-                        {
-                            IconUrl = "http://media.steampowered.com/steamcommunity/public/images/apps/" +
+                        (
+                            "http://media.steampowered.com/steamcommunity/public/images/apps/" +
                             game.appid.ToString() + "/" + game.img_icon_url.ToString() + ".jpg",
-                            AppId = game.appid,
-                            Name = game.name,
-                            Playtime = Math.Round(game.playtime_forever / 60, 2),
-                            Lastplayed = ConvertToTime(game.rtime_last_played).ToString()
-                        };
+                            game.appid,
+                            game.name,
+                            Math.Round(game.playtime_forever / 60, 2),
+                            game.rtime_last_played
+                        );
                         games.Add(gameInfo);
                     }
-
                     return games;
                 }
             }
-
             return null;
-        }
-
-        public DateTime ConvertToTime(int time)
-        {
-            var expirationTime = DateTimeOffset
-                           .FromUnixTimeSeconds(time)
-                           .DateTime;
-
-            return expirationTime;
         }
 
 
